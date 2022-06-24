@@ -3,62 +3,7 @@ import NoteContext from './noteContext';
 
 const NoteState = (props) => {
     const host = "http://localhost:5000"
-    const notesInitial = [
-        {
-            "_id": "62a9bf361e3d2494c47a25de",
-            "user": "62a8996e3c06b78fcc5bb2e3",
-            "title": "First Note",
-            "description": "Good Bye Cruel World",
-            "tag": "personal",
-            "date": "2022-06-15T11:15:02.098Z",
-            "__v": 0
-        },
-        {
-            "_id": "62a9c0701e3d2494c47a25e1",
-            "user": "62a8996e3c06b78fcc5bb2e3",
-            "title": "Second Note updated",
-            "description": "Update ho rhi kya",
-            "tag": "personal",
-            "date": "2022-06-15T11:20:16.606Z",
-            "__v": 0
-        },
-        {
-            "_id": "62a9bf361e3d2494c47a25de",
-            "user": "62a8996e3c06b78fcc5bb2e3",
-            "title": "First Note",
-            "description": "Good Bye Cruel World",
-            "tag": "personal",
-            "date": "2022-06-15T11:15:02.098Z",
-            "__v": 0
-        },
-        {
-            "_id": "62a9c0701e3d2494c47a25e1",
-            "user": "62a8996e3c06b78fcc5bb2e3",
-            "title": "Second Note updated",
-            "description": "Update ho rhi kya",
-            "tag": "personal",
-            "date": "2022-06-15T11:20:16.606Z",
-            "__v": 0
-        },
-        {
-            "_id": "62a9bf361e3d2494c47a25de",
-            "user": "62a8996e3c06b78fcc5bb2e3",
-            "title": "First Note",
-            "description": "Good Bye Cruel World",
-            "tag": "personal",
-            "date": "2022-06-15T11:15:02.098Z",
-            "__v": 0
-        },
-        {
-            "_id": "62a9c0701e3d2494c47a25e1",
-            "user": "62a8996e3c06b78fcc5bb2e3",
-            "title": "Second Note updated",
-            "description": "Update ho rhi kya",
-            "tag": "personal",
-            "date": "2022-06-15T11:20:16.606Z",
-            "__v": 0
-        }
-    ]
+    const notesInitial = [];
 
     const [notes, setNotes] = useState(notesInitial)
 
@@ -103,9 +48,18 @@ const NoteState = (props) => {
         setNotes(notes.concat(note))
     }
     // Delete a Note
-    const deleteNote = (id) => {
-        // TODO API Call
-        console.log("deleting a note" + id);
+    const deleteNote = async (id) => {
+        // API Call
+        const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJhODk5NmUzYzA2Yjc4ZmNjNWJiMmUzIn0sImlhdCI6MTY1NTI4ODMwN30.s_KoOu8WpC8Ued-bxJ87BXi7YOlVXsP1ZkpYCx5AfHg'
+            }
+        });
+        const json = await response.json();
+        console.log(json);
+
         const newNotes = notes.filter((note) => { return note._id !== id })
         setNotes(newNotes);
     }
