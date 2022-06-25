@@ -5,8 +5,10 @@ import Noteitem from './Noteitem';
 
 export default function Notes() {
     const context = useContext(noteContext);
-    const { notes, getNotes } = context;
-    const [note , setNote] = useState({etitle : "",edescription: "",etag : ""})
+    const { notes, getNotes, editNote } = context;
+    const [note , setNote] = useState({id: "",etitle : "",edescription: "",etag : ""})
+    const ref = useRef(null);
+    const refClose = useRef(null);
 
     useEffect(() => {
         getNotes();
@@ -14,8 +16,9 @@ export default function Notes() {
     }, [])
 
     const handleClick = (e) => {
-        console.log("Update Note");
-        e.preventDefault();
+        // console.log("Update Note");
+        editNote(note.id, note.etitle, note.edescription, note.etag);
+        refClose.current.click();
     }
 
     const onChange = (e) => {
@@ -24,9 +27,9 @@ export default function Notes() {
 
     const updateNote = (currentNote) => {
         ref.current.click();
-        setNote({etitle: currentNote.title,edescription: currentNote.description, etag: currentNote.tag});
+        setNote({id: currentNote._id,etitle: currentNote.title,edescription: currentNote.description, etag: currentNote.tag});
     }
-    const ref = useRef(null)
+
     return (
         <>
             <AddNote />
@@ -45,27 +48,30 @@ export default function Notes() {
                             <form>
                                 <div className="mb-3">
                                     <label htmlFor="noteTitle" className="form-label">Title</label>
-                                    <input type="text" className="form-control" id="etitle" name='etitle' value={note.etitle} onChange={onChange} aria-describedby="emailHelp" />
+                                    <input type="text" className="form-control" id="etitle" name='etitle' value={note.etitle} onChange={onChange} aria-describedby="emailHelp" required minLength={5}/>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="noteDescription" className="form-label">Description</label>
-                                    <input type="text" className="form-control" onChange={onChange} id="edescription" value={note.edescription} name='edescription' />
+                                    <input type="text" className="form-control" onChange={onChange} id="edescription" value={note.edescription} name='edescription' required minLength={5}/>
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="noteTag" className="form-label">Tag</label>
-                                    <input type="text" className="form-control" onChange={onChange} id="etag" name='etag' value={note.etag} />
+                                    <input type="text" className="form-control" onChange={onChange} id="etag" name='etag' value={note.etag} required />
                                 </div>
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button onClick={handleClick} type="button" className="btn btn-primary">Update Note</button>
+                            <button type="button" ref={refClose} className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button disabled={note.etitle.length<5 || note.edescription.length<5} onClick={handleClick} type="button" className="btn btn-primary">Update Note</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className='my-3 row'>
+            <div className='container my-3 row'>
                 <h2>Your Notes</h2>
+                <div className='container'>
+                {notes.length===0 && 'No Notes To Display'}
+                </div>
                 {notes.map((note) => {
                     return <Noteitem key={note._id} note={note} updateNote={updateNote}/>
                 })}
