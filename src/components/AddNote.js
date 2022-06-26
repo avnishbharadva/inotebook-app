@@ -3,7 +3,7 @@ import { useState } from 'react';
 import noteContext from '../context/notes/noteContext'
 
 
-export default function AddNote() {
+export default function AddNote(props) {
     const context = useContext(noteContext);
     const { addNote } = context;
 
@@ -12,6 +12,7 @@ export default function AddNote() {
         e.preventDefault();
         addNote(note.title,note.description,note.tag);
         setNote({title:"",description:"",tag:""})
+        props.showAlert("Note Added Successfully","success");
     }
 
     const onChange = (e) => {
@@ -21,7 +22,7 @@ export default function AddNote() {
   return (
     <div className='container'>
       <h1 className="my-3">Add a Note</h1>
-      <form>
+      <form onSubmit={handleClick}>
         <div className="mb-3">
           <label htmlFor="noteTitle" className="form-label">Title</label>
           <input type="text" className="form-control" id="title" name='title' value={note.title} onChange={onChange} aria-describedby="emailHelp" minLength={5} required />
@@ -34,8 +35,10 @@ export default function AddNote() {
           <label htmlFor="noteTag" className="form-label">Tag</label>
           <input type="text" className="form-control" onChange={onChange} id="tag" name='tag' value={note.tag} required />
         </div>
-        <button disabled={note.title.length<5 || note.description.length<5} type="submit" className="btn btn-primary" onClick={handleClick}>Add Note</button>
+        <button type="submit" className="btn btn-primary">Add Note</button>
       </form>
     </div>
   )
 }
+
+// disabled={note.title.length<5 || note.description.length<5}

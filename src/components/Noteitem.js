@@ -17,7 +17,7 @@ export default function Noteitem(props) {
                     <p className="card-text">{note.date}</p>
                     <div className='d-flex align-items-center justify-content-evenly'>
                     <i className="fa-solid fa-pen-to-square" onClick={() => {updateNote(note)}}></i>
-                    <i className="fa-solid fa-trash-can" onClick={() => {deleteNote(note._id)}}></i>
+                    <i className="fa-solid fa-trash-can" onClick={() => {deleteNote(note._id); props.showAlert("Deleted Successfully","success")}}></i>
                     </div>
                 </div>
         </div>
